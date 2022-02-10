@@ -1,0 +1,16 @@
+[package]
+name = "lumiere"
+version = "0.1.0"
+authors = ["Valerian Garleanu <valerian@dusklabs.io>"]
+edition = "2021"
+build = "build.rs"
+license = "GPL-3.0-only"
+
+[dependencies]
+slint = "0.2.0"
+glow = { version = "0.11" }
+instant = { version = "0.1", features = ["now"] }
+mpv = "0.2.3"
+
+[build-dependencies]
+slint-build = "0.2.0"
