@@ -105,13 +105,12 @@ impl EGLUnderlay {
 
             let quad_verts: [f32; 24] = [
                 // positions   // texCoords
-                -1.0,  1.0,  0.0, 1.0,
-                -1.0, -1.0,  0.0, 0.0,
-                1.0, -1.0,  1.0, 0.0,
-
-                -1.0,  1.0,  0.0, 1.0,
-                1.0, -1.0,  1.0, 0.0,
-                1.0,  1.0,  1.0, 1.0
+                -1.0,  1.0,    0.0, 1.0,
+                -1.0, -1.0,    0.0, 0.0,
+                1.0,  -1.0,    1.0, 0.0,
+                -1.0,  1.0,    0.0, 1.0,
+                1.0,  -1.0,    1.0, 0.0,
+                1.0,   1.0,    1.0, 1.0
             ];
 
             let quad_vao = gl.create_vertex_array().unwrap();
@@ -142,7 +141,7 @@ impl EGLUnderlay {
 
             let texture = gl.create_texture().unwrap();
             gl.bind_texture(glow::TEXTURE_2D, Some(texture));
-            gl.tex_image_2d(glow::TEXTURE_2D, 0, glow::RGB as i32, 1000, 1000, 0, glow::RGB, glow::UNSIGNED_BYTE, None);
+            gl.tex_image_2d(glow::TEXTURE_2D, 0, glow::RGB as i32, 1920, 1080, 0, glow::RGB, glow::UNSIGNED_BYTE, None);
             gl.tex_parameter_i32(glow::TEXTURE_2D, glow::TEXTURE_MIN_FILTER, glow::LINEAR as i32);
             gl.tex_parameter_i32(glow::TEXTURE_2D, glow::TEXTURE_MAG_FILTER, glow::LINEAR as i32);
 
@@ -150,7 +149,7 @@ impl EGLUnderlay {
 
             let depth_attachment = gl.create_texture().unwrap();
             gl.bind_texture(glow::TEXTURE_2D, Some(depth_attachment));
-            gl.tex_storage_2d(glow::TEXTURE_2D, 1, glow::DEPTH24_STENCIL8, 1000, 1000);
+            gl.tex_storage_2d(glow::TEXTURE_2D, 1, glow::DEPTH24_STENCIL8, 1920, 1080);
             gl.framebuffer_texture_2d(glow::FRAMEBUFFER, glow::DEPTH_STENCIL_ATTACHMENT, glow::TEXTURE_2D, Some(depth_attachment), 0);
 
             assert_eq!(gl.check_framebuffer_status(glow::FRAMEBUFFER), glow::FRAMEBUFFER_COMPLETE);
@@ -186,15 +185,14 @@ impl EGLUnderlay {
 
             gl.bind_framebuffer(glow::FRAMEBUFFER, Some(self.fbo));
             gl.clear_color(0.1, 0.1, 0.1, 1.0);
-            gl.clear(glow::COLOR_BUFFER_BIT | glow::DEPTH_BUFFER_BIT);
 
             let mut params = [
                 mpv_render_param {
                     type_: mpv_render_param_type_MPV_RENDER_PARAM_OPENGL_FBO,
                     data: &mut mpv_opengl_fbo {
                         fbo: transmute(self.fbo),
-                        w: 1000,
-                        h: 1000,
+                        w: 1920,
+                        h: 1080,
                         internal_format: 0,
                     } as *mut _ as *mut c_void,
                 },
@@ -217,7 +215,6 @@ impl EGLUnderlay {
             gl.clear(glow::COLOR_BUFFER_BIT);
 
             gl.use_program(Some(self.program));
-            gl.bind_buffer(glow::ARRAY_BUFFER, Some(self.vbo));
             gl.bind_vertex_array(Some(self.vao));
             gl.bind_texture(glow::TEXTURE_2D, Some(self.texture));
             gl.draw_arrays(glow::TRIANGLES, 0, 6);
