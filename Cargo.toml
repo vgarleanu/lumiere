@@ -10,8 +10,7 @@ license = "GPL-3.0-only"
 slint = "0.2.0"
 glow = { version = "0.11" }
 instant = { version = "0.1", features = ["now"] }
-mpv = "0.2.3"
-libmpv-sys = "3.1.0"
+libmpv = { git = "https://github.com/anlumo/libmpv-rs" }
 
 [build-dependencies]
 slint-build = "0.2.0"

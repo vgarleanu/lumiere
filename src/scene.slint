@@ -7,30 +7,31 @@ import { ScrollView, Button, CheckBox, SpinBox, Slider, GroupBox, LineEdit, Stan
 App := Window {
     preferred-width: 1000px;
     preferred-height: 1000px;
-    title: "Slint OpenGL Underlay Example";
+    title: "Slint MPV";
     icon: @image-url("../../logo/slint-logo-small-light-128x128.png");
 
-    property <bool> rotation-enabled <=> apply-rotation.checked;
+    property window_width <=> width;
+    property window_height <=> height;
+    property<bool> is_paused;
 
     VerticalBox {
         Rectangle {
-            background: #ffffff92;
+            background: #ffffff00;
+        }
+        Rectangle {
+            background: #ffffffaa;
             HorizontalBox {
-                Text {
-                    text: "This text is rendered using Slint. The animation below is rendered using OpenGL code.";
-                    wrap: word-wrap;
-                }
-
-                VerticalLayout {
-                    alignment: start;
-                    apply-rotation := CheckBox {
-                        checked: true;
-                        text: "Rotate the OpenGL underlay";
+                HorizontalLayout {
+                    alignment: center;
+                    Button {
+                        width: 100px;
+                        text: !is_paused ? "pause" : "play";
+                        clicked => {
+                            is_paused = !is_paused;
+                        }
                     }
                 }
             }
         }
-
-        Rectangle {}
     }
 }
