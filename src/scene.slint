@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-Slint-commercial
 
 import { ScrollView, Button, CheckBox, SpinBox, Slider, GroupBox, LineEdit, StandardListView,
-    ComboBox, HorizontalBox, VerticalBox, GridBox, TabWidget, TextEdit, AboutSixtyFPS } from "std-widgets.slint";
+    ComboBox, HorizontalBox, VerticalBox, GridBox, TabWidget, TextEdit, Slider } from "std-widgets.slint";
 
 App := Window {
     preferred-width: 1000px;
@@ -13,21 +13,53 @@ App := Window {
     property window_width <=> width;
     property window_height <=> height;
     property<bool> is_paused;
+    property<float> seek_position: 0;
+    property<string> ts_label: "00:00:00 / 00:00:00";
+
+    property<image> play_icon: @image-url("../assets/play-solid.svg");
+    property<image> pause_icon: @image-url("../assets/pause-solid.svg");
+
+    property<float> new_position: 0;
+    property<bool> position_ackd: true;
 
     VerticalBox {
         Rectangle {
             background: #ffffff00;
         }
+
         Rectangle {
             background: #ffffffaa;
+            height: 50px;
             HorizontalBox {
                 HorizontalLayout {
-                    alignment: center;
                     Button {
-                        width: 100px;
-                        text: !is_paused ? "pause" : "play";
+                        width: 55px;
+                        icon: !is_paused ? pause_icon : play_icon;
                         clicked => {
                             is_paused = !is_paused;
+                        }
+                    }
+                    HorizontalBox {
+                        horizontal-stretch: 1;
+                        padding-top: 12px;
+
+                        Slider {
+                            width: 100%;
+                            height: 12px;
+                            value: seek_position * 100;
+                            changed(value) => {
+                                new_position = value;
+                                position_ackd = false;
+                                seek_position = value;
+                            }
+                        }
+                    }
+
+                    HorizontalBox {
+                        padding-top: 12px;
+                        Text {
+                            text: ts_label;
+                            color: #000000;
                         }
                     }
                 }

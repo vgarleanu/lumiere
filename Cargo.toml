@@ -14,3 +14,6 @@ libmpv = { git = "https://github.com/anlumo/libmpv-rs" }
 
 [build-dependencies]
 slint-build = "0.2.0"
+
+[patch.crates-io.slint]
+path = "../slint/api/rs/slint"
